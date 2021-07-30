@@ -10,11 +10,11 @@ app.use(express.json())
 app.use(express.static('build'))
 app.use(morgan(':method :url :status :response-time ms :body'))
 
-morgan.token('body', function (request, response) {
+morgan.token('body', function (request) {
   if (Object.keys(request.body).length) {
-    return JSON.stringify(request.body);
-  } else return ' ';
-});
+    return JSON.stringify(request.body)
+  } else return ' '
+})
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -48,7 +48,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -57,11 +57,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
   const id = request.params.id
-
-  const person = new Person({
-    name: body.name,
-    number: body.number,
-  })
 
   Person.findByIdAndUpdate(id, body, { new: true })
     .then(updatedPerson => {
@@ -74,8 +69,8 @@ app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name || !body.number) {
-    return response.status(400).json({ 
-      error: 'content missing' 
+    return response.status(400).json({
+      error: 'content missing'
     })
   }
 
