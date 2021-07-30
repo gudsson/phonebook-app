@@ -15,29 +15,28 @@ const url =
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
 const personSchema = new mongoose.Schema({
+  id: String,
   name: String,
   number: String,
-  date: Date,
 })
 
 const Person = mongoose.model('Person', personSchema)
 
 if (process.argv.length === 3) {
-    Person.find({}).then(result => {
-        result.forEach(person => {
-            console.log(person)
-        })
-        mongoose.connection.close()
-    })
-} else {
-    const person = new Person({
-      name: personName,
-      number: personNumber,
-      date: new Date(),
-    })
-    
-    person.save().then(result => {
-      console.log(`added ${personName} number ${personNumber} to phonebook`)
+  Person.find({}).then(result => {
+      result.forEach(person => {
+          console.log(person)
+      })
       mongoose.connection.close()
-    })
+  })
+} else {
+  const person = new Person({
+    name: personName,
+    number: personNumber,
+  })
+  
+  person.save().then(result => {
+    console.log(`added ${personName} number ${personNumber} to phonebook`)
+    mongoose.connection.close()
+  })
 }
