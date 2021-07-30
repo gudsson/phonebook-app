@@ -19,12 +19,20 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFind
 const personSchema = new mongoose.Schema({
   name: {
     type: String,
-    minLength: 1,
+    minLength: 3,
     required: true,
     unique: true
   },
   number: {
-    type: String
+    type: String,
+    required: true,
+    validate: {
+      validator: (str) => {
+        let digits = str.replace(/\D/, '')
+        return digits.length >= 8
+      },
+      message: 'Phonenumber must have minimum of 8 digits'
+    }
   },
 })
 
